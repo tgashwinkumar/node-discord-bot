@@ -21,6 +21,10 @@ client.on('message', msg => {
         const tsunAtt = new MessageAttachment('./images/tsun.gif')
         msg.channel.send(`${msg.author}!! Did you mention me ??. Bakaaaa!!`);
         msg.channel.send(tsunAtt)
+    }else if(command === 'divide' || command === '/'){
+        let answer = 1
+        answer = args[0]/args[1];
+        msg.reply(`Your answer is ${answer}`)
     }else if(command === 'add' || command === '+'){
         let sum = 0
         const cryAtt = new MessageAttachment('./images/cry.gif')
