@@ -1,18 +1,31 @@
-const {Client, MessageEmbed, MessageAttachment} = require('discord.js');
+const {Client, Collection} = require('discord.js');
 const config = require('./config.json')
-const cherio = require('cherio');
-const request = require('request');
 const fs = require('fs');
+
 const client = new Client();
+client.commands = new Collection();
 
 const prefix = '$';
+
+fs.readdir('./commands/', (err, files) => {
+    if(err)console.log(err);
+    let jsfile = files.filter(file => file.split(".").pop() === "js")
+
+    if(jsfile.length <= 0){
+        console.log("Error finding commands.")
+        return;
+    }
+
+    jsfile.forEach((file,index) => {
+        let props = require(`./commands/${file}`)
+        console.log( `${file} loaded.`)
+        client.commands.set(props.help.name, props)
+    })
+})
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
-
-var WriteStream  = fs.createWriteStream("ImagesLink.txt", "UTF-8");
-
 
 client.on('message', message => {
     if(message.author.bot)return;
@@ -22,47 +35,11 @@ client.on('message', message => {
     const commandBody = message.content.slice(prefix.length);
     const args = commandBody.split(' ');
     const command = args.shift().toLowerCase();
+
+    let commandFile = client.commands.get(command);
+
+    if(commandFile) commandFile.run(client, message, args);
     
-    switch(command){
-        case 'image':
-            
-            let imageArray = [];
-            let queryString = args.toString().replace(',','+')
-            
-            request(`https://www.bing.com/images/search?q=${queryString}&first=1&tsc=ImageBasicHover`, (err, resp, html)=>{
-                if(!err && resp.statusCode == 200){
-                    console.log("Request was success");
-                    
-                    // Define Cherio or $ Object 
-                    const $ = cherio.load(html);
-                    
-                    $("img").each((index, image)=>{
-                        var img = $(image).attr('src');
-                        if(img.includes('https')){
-                            imageArray.push(img)
-                            // console.log(img)
-                            WriteStream.write(img);
-                            WriteStream.write("\n");
-                        }else{img = 'No image found'}
-                        // const sendIMG = new MessageAttachment(imageArray[1])
-                        // message.channel.send(`Here is your image!\n`);
-                        // message.channel.send(sendIMG)
-                    }); 
-                    console.log(imageArray.slice(0).slice(0))
-                    message.channel.send('Hello')
-                }else{
-                    console.log("Request Failed ");
-                }
-            });
-        break;
-        case 'help':
-            if(message.author.username === 'MrRhuezzler'){
-                message.reply('Poda parambara naari')
-            }else{
-                message.reply('You are so cute!!')
-            }
-        break;
-    }
 })
 
 
