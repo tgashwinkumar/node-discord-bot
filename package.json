@@ -9,6 +9,8 @@
   "author": "me",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.4.1"
+    "cherio": "^1.0.0-rc.2",
+    "discord.js": "^12.4.1",
+    "request": "^2.88.2"
   }
 }
