@@ -25,7 +25,7 @@ fs.readdir('./commands/', (err, files) => {
 });
 
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag} in ${client.guilds.size}!`);
+    console.log(`Logged in as ${client.user.tag}!`);
 });
 
 client.on('message', message => {
