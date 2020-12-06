@@ -1,4 +1,4 @@
-const {Client, Collection} = require('discord.js');
+const {Client, Collection, MessageEmbed} = require('discord.js');
 const config = require('./config.json')
 const fs = require('fs');
 
@@ -38,7 +38,17 @@ client.on('message', message => {
 
     let commandFile = client.commands.get(command);
 
-    if(commandFile) commandFile.run(client, message, args);
+    if(commandFile) commandFile.run(client, message, args)
+    else {
+        const errorEmbed = new MessageEmbed()
+                        .setTitle('404: Command Not Found')
+                        .setFooter('Try $help to see the list of commands')
+                        .setColor(0xff0000)
+                        .setDescription('Yo! Use the right command!')
+                        .attachFiles(['./assets/404.png'])
+                        .setImage('attachment://404.png')
+        message.channel.send(errorEmbed);
+    }
     
 })
 
