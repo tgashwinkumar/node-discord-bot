@@ -26,7 +26,7 @@ module.exports.run = async (client, message, args) => {
                 console.log(imgResults[randomPos])
                 message.channel.send(`The title is: ${imgResults[randomPos].title}`)
                 message.channel.send(`The source is: ${imgResults[randomPos].source}`)
-                message.channel.send(`The link is: ${imgResults[randomPos].sourceUrl}`)
+                message.channel.send(`The link is: ${imgResults[randomPos].link}`)
             }else{
                 message.channel.send(`Here is your image!\n`);
                 message.channel.send(imgAttach)
